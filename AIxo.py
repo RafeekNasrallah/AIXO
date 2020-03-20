@@ -133,12 +133,13 @@ pygame.init()
 screen = pygame.display.set_mode((300, 300))
 font = pygame.font.Font('freesansbold.ttf', 100)
 
-originalBoard = [[0,0,0],
-                 [0,0,0],
-                 [0,0,0]]
+
 draw_boardstart()
 pygame.display.update()
 while True:
+    originalBoard = [[0,0,0],
+                 [0,0,0],
+                 [0,0,0]]
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             exit()
@@ -214,35 +215,34 @@ while True:
                             pygame.display.update()
                             # print(originalBoard)
                             x = 2
-    if (isfull(originalBoard)) or thewinner(originalBoard) != 0:
-        break
-                            # print("hehehe")
+    if isfull(originalBoard) or thewinner(originalBoard) != 0:
+        font2 = pygame.font.Font('freesansbold.ttf', 50)
+        winner = thewinner(originalBoard)
+        if winner == 1:
+            if fx:
+                text = font2.render('O WINS', True, (255, 0, 0))
+            else:
+                text = font2.render('X WINS', True, (255, 0, 0))
+            textRect = text.get_rect()
+            textRect.center = (150, 150)
+            screen.blit(text, textRect)
+            pygame.display.update()
+            time.sleep(2)
 
-
-font2 = pygame.font.Font('freesansbold.ttf', 50)
-winner = thewinner(originalBoard)
-if winner == 1:
-    if fx:
-        text = font2.render('O WINS', True, (255, 0, 0))
-    else:
-        text = font2.render('X WINS', True, (255, 0, 0))
-    textRect = text.get_rect()
-    textRect.center = (150, 150)
-    screen.blit(text, textRect)
-    pygame.display.update()
-    time.sleep(1)
-
-else:
-    if winner == 2:
-        text = font2.render('O WINS', True, (255, 0, 0))
-        textRect = text.get_rect()
-        textRect.center = (150, 150)
-        screen.blit(text, textRect)
-        pygame.display.update()
-        time.sleep(1)
-    else:
-        text = font2.render('TIE', True, (255, 0, 0))
-        textRect = text.get_rect()
-        textRect.center = (150, 150)
-        screen.blit(text, textRect)
+        else:
+            if winner == 2:
+                text = font2.render('O WINS', True, (255, 0, 0))
+                textRect = text.get_rect()
+                textRect.center = (150, 150)
+                screen.blit(text, textRect)
+                pygame.display.update()
+                time.sleep(2)
+            else:
+                text = font2.render('TIE', True, (255, 0, 0))
+                textRect = text.get_rect()
+                textRect.center = (150, 150)
+                screen.blit(text, textRect)
+                pygame.display.update()
+                time.sleep(2)
+        draw_boardstart()
         pygame.display.update()
