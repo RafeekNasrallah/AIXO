@@ -41,24 +41,25 @@ def allmoves(board,player):#generates all possible moves for a given board and p
     return themoves
 
 
-def whowins(board): # evaluate function for minimax
-    if thewinner(board) == 1:
-        return 10
-    if thewinner(board) == 2:
-        return -10
-    if isfull(board):
-        return 0
+def whowins(board,fx): # evaluate function for minimax
+        if thewinner(board) == 1:
+            return 10
+        if thewinner(board) == 2:
+            return -10
+        if isfull(board):
+            return 0
 
 
-def theMove(board,player,alpha,beta): #picks a starting move, then calls minimax to compare which move is the best
+def theMove(board,player,alpha,beta,fx): #picks a starting move, then calls minimax to compare which move is the best
     bestScore=-99999
     for i in range(3):
         for j in range(3):
             if board[i][j]==0:
                 temp = deepcopy(board)
                 temp[i][j] = player
-                score = minimax(temp,2,alpha,beta)
-                if score>bestScore:
+                print(temp)
+                score = minimax(temp,2,alpha,beta,fx)
+                if score > bestScore:
                     bestScore = score
                     move = (i,j)
     (i,j) = move
@@ -68,27 +69,27 @@ def theMove(board,player,alpha,beta): #picks a starting move, then calls minimax
 
 
 
-def minimax(board,player,alpha,beta): #the minimax algorithm itslf
+def minimax(board,player,alpha,beta,fx): #the minimax algorithm itslf
     if (isfull(board)) or (thewinner(board) != 0): #terminate condition
-        return whowins(board)
+        return whowins(board,fx)
     list = allmoves(board,player) # generate all possible moves and puts them in a list
     if player == 1: # 1 is X and its the maximizer
         best = -99999
         for move in list: # iterate through all the possible moves and calling minimax on them
-            score = minimax(move,2,alpha,beta)
+            score = minimax(move,2,alpha,beta,fx)
             best = max(best, score)
-            alpha = max(alpha, best)
-            if beta <= alpha:
-                return
+            #alpha = max(alpha, best)
+            #if beta <= alpha:
+            #    return
         return best
     else:
         best = 99999
         for move in list:
-            score = minimax(move,1,alpha,beta)
+            score = minimax(move,1,alpha,beta,fx)
             best = min(best, score)
-            alpha = min(alpha, best)
-            if beta <= alpha:
-                return
+            #alpha = min(alpha, best)
+            #if beta <= alpha:
+            #    return
         return best
 
 def findpos(i): # for GUI, checks for a given Pos, which block he pressed
@@ -163,8 +164,8 @@ while True: # main loop, it only exists when the users quit the window, otherwis
                 for event3 in pygame.event.get():
                     if event3.type == pygame.QUIT:
                         exit()
-                    if event3.type == pygame.MOUSEBUTTONDOWN:
-                        if x == 2:
+                    if x == 2:
+                        if event3.type == pygame.MOUSEBUTTONDOWN:
                             if fx:
                                 texto = font.render('X', True, (0, 0, 0))
                             else:
@@ -185,30 +186,31 @@ while True: # main loop, it only exists when the users quit the window, otherwis
                             pygame.display.update()
                             x = 1
 
-                    if x ==1:
-                        if isfull(originalBoard):
-                            break
-                        if fx:
-                            text = font.render('O', True, (0, 0, 0))
-                        else:
-                            text = font.render('X', True, (0, 0, 0))
-                        textRect = text.get_rect()
-                        if first:
-                            textRect.center = (45, 55)
-                            screen.blit(text, textRect)
-                            pygame.display.update()
-                            originalBoard[0][0] = 1
-                            x = 2
-                            first = False
-                        else:
-                            (i, j) = theMove(originalBoard, x, -99999, 99999)
-                            textRect.center = (i * 100 + 45, j * 100 + 55)
-                            screen.blit(text, textRect)
-                            pygame.display.update()
-                            originalBoard[i][j] = 1
-                            textRect.center = ((i * 100) + 10, (j * 100) + 10)
-                            pygame.display.update()
-                            x = 2
+                    else:
+                        if x ==1:
+                            if isfull(originalBoard):
+                                break
+                            if fx:
+                                text = font.render('O', True, (0, 0, 0))
+                            else:
+                                text = font.render('X', True, (0, 0, 0))
+                            textRect = text.get_rect()
+                            if first:
+                                textRect.center = (45, 55)
+                                screen.blit(text, textRect)
+                                pygame.display.update()
+                                originalBoard[0][0] = 1
+                                x = 2
+                                first = False
+                            else:
+                                (i, j) = theMove(originalBoard, x, -99999, 99999,fx)
+                                textRect.center = (i * 100 + 45, j * 100 + 55)
+                                screen.blit(text, textRect)
+                                pygame.display.update()
+                                originalBoard[i][j] = 1
+                                textRect.center = ((i * 100) + 10, (j * 100) + 10)
+                                pygame.display.update()
+                                x = 2
     if isfull(originalBoard) or thewinner(originalBoard) != 0: # writing who wins on teh screen in red when everything is done and restarting the game after 2 seconds
         font2 = pygame.font.Font('freesansbold.ttf', 50)
         winner = thewinner(originalBoard)
