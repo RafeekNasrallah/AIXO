@@ -57,7 +57,6 @@ def theMove(board,player,alpha,beta,fx): #picks a starting move, then calls mini
             if board[i][j]==0:
                 temp = deepcopy(board)
                 temp[i][j] = player
-                print(temp)
                 score = minimax(temp,2,alpha,beta,fx)
                 if score > bestScore:
                     bestScore = score
@@ -78,18 +77,18 @@ def minimax(board,player,alpha,beta,fx): #the minimax algorithm itslf
         for move in list: # iterate through all the possible moves and calling minimax on them
             score = minimax(move,2,alpha,beta,fx)
             best = max(best, score)
-            #alpha = max(alpha, best)
-            #if beta <= alpha:
-            #    return
+            alpha = max(alpha, best)
+            if beta <= alpha:
+                return
         return best
     else:
         best = 99999
         for move in list:
             score = minimax(move,1,alpha,beta,fx)
             best = min(best, score)
-            #alpha = min(alpha, best)
-            #if beta <= alpha:
-            #    return
+            alpha = min(alpha, best)
+            if beta <= alpha:
+                return
         return best
 
 def findpos(i): # for GUI, checks for a given Pos, which block he pressed
