@@ -11,3 +11,6 @@ and now, compile and run the python file:
 ```
 python3 AIxo.py
 ```
+
+
+![](https://github.com/RafeekNasrallah/AIXO/blob/master/howto.gif)
